@@ -1,0 +1,207 @@
+##SRINAGAR MAP
+## Scenario settings
+Scenario.name = default_scenario
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43200s == 12h
+Scenario.endTime = 86400
+
+## Interface-specific settings:
+# type : which interface class the interface belongs to
+# For different types, the sub-parameters are interface-specific
+# For SimpleBroadcastInterface, the parameters are:
+# transmitSpeed : transmit speed of the interface (bytes per second) 
+# transmitRange : range of the interface (meters)
+
+# "Bluetooth" interface for all nodes
+btInterface.type = SimpleBroadcastInterface
+# Transmit speed of 2 Mbps = 250kBps
+btInterface.transmitSpeed = 250k
+btInterface.transmitRange = 10
+
+# High speed, long range, interface for group 4
+highspeedInterface.type = SimpleBroadcastInterface
+highspeedInterface.transmitSpeed = 10M
+highspeedInterface.transmitRange = 200
+
+# Define 6 different node groups
+Scenario.nrofHostGroups = 5
+
+## Group-specific settings:
+# msgTtl : TTL (minutes) of the messages created by this host group, default=infinite
+
+## Group and movement model specific settings
+# pois: Points Of Interest indexes and probabilities (poiIndex1, poiProb1, poiIndex2, poiProb2, ... )
+#       for ShortestPathMapBasedMovement
+# okMaps : which map nodes are OK for the group (map file indexes), default=all 
+#          for all MapBasedMovement models
+# routeFile: route's file path - for MapRouteMovement
+# routeType: route's type - for MapRouteMovement
+
+# Common settings for all groups
+Group.movementModel = ShortestPathMapBasedMovement
+# Group.okMaps = 1
+
+Group.router = EpidemicOracleRouter
+---------------------------------------
+#Group.deleteDelivered = true
+---------------------------------------
+Group.bufferSize = 30M
+Group.waitTime = 100, 120
+# All nodes have the bluetooth interface
+Group.nrofInterfaces = 1
+Group.interface1 = btInterface
+# Walking speeds
+Group.speed = 0.5, 0.5
+# Message TTL of 300 minutes (5 hours)
+Group.msgTtl = 300
+
+# Group.nrofHosts = 8
+
+Group1.movementModel = StationaryMovement
+Group1.nrofHosts = 1
+Group1.nodeLocation = 688,388
+Group1.groupID = hospital_1_
+Group1.bufferSize = 50M
+Group1.nrofInterfaces = 2
+Group1.interface1 = btInterface
+Group1.interface2 = highspeedInterface
+# Group1.deleteDelivered = true
+
+Group2.movementModel = StationaryMovement
+Group2.nrofHosts = 1
+Group2.nodeLocation = 980,480
+Group2.groupID = hospital_2_
+Group2.bufferSize = 50M
+Group2.nrofInterfaces = 2
+Group2.interface1 = btInterface
+Group2.interface2 = highspeedInterface
+#Group2.deleteDelivered = true
+
+Group3.groupID = car_
+Group3.nrofHosts = 3
+# Group3.movementModel = MapBasedMovement
+Group3.speed = 1,1
+#Group3.deleteDelivered = true
+
+Group5.movementModel = StationaryMovement
+Group5.nrofHosts = 1
+Group5.nodeLocation = 840,370
+Group5.groupID = relay_
+Group5.bufferSize = 50M
+Group5.nrofInterfaces = 2
+Group5.interface1 = btInterface
+Group5.interface2 = highspeedInterface
+#Group5.deleteDelivered = true
+
+Group4.groupID = ambulance_
+Group4.nrofHosts = 1
+Group4.waitTime = 700,700
+Group4.speed = 2,2
+
+#Group4.movementModel = ExternalPathMovement
+Group4.traceFile = trace.txt
+Group4.activeFile = a.txt
+#Group4.nodeLocation = 711, 391
+#Group4.deleteDelivered = true
+#Group4.activeTimes = 1720,6000
+#Group4.activePeriods = 500,3000
+
+## Message creation parameters 
+# How many event generators
+Events.nrof = 1
+
+# Class of the first event generator
+Events1.class = MessageEventGenerator    
+##for creating new event generation class
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 900,3000
+# Events1.interval = 200,400
+
+# Message sizes (500kB - 1MB)
+Events1.size = 500k,1M
+# range of message source/destination addresses
+Events1.hosts = 2,3
+#-------------------------------------------
+# Destination
+Events1.tohosts = 0,1
+# Message ID prefix
+Events1.prefix = EM
+# Events1.time = 750, 850
+
+## Movement model settings
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = 1
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = 2000, 2500
+# How long time to move hosts in the world before real simulation (default = 1000)
+MovementModel.warmup = 1000
+
+## Map based movement -movement model specific settings
+MapBasedMovement.nrofMapFiles = 1
+
+# MapBasedMovement.mapFile1 = data/map_wkt.wkt
+MapBasedMovement.mapFile1 = data/srinagar_wkt.wkt
+
+## Reports - all report names have to be valid report classes
+
+# how many reports to load
+Report.nrofReports = 20
+# length of the warm up period (simulated seconds)
+Report.warmup = 0
+#Report.granularity = 43000
+# default directory of reports (can be overridden per Report with output setting)
+Report.reportDir = reports/
+
+# Report classes to load
+ Report.report1 = AdjacencyGraphvizReport
+ Report.report2 = ConnectivityDtnsim2Report
+ Report.report3 = ConnectivityONEReport
+ Report.report4 = ContactsDuringAnICTReport
+ Report.report5 = ContactsPerHourReport
+ Report.report6 = ContactTimesReport
+ Report.report7 = CreatedMessagesReport
+ Report.report8 = DeliveredMessagesReport
+ Report.report9 = DistanceDelayReport
+ Report.report10 = DTN2Reporter
+ Report.report12 = EventLogReport
+ Report.report13 = FloatingAppReporter
+ Report.report15 = FloatingMessageReport
+ Report.report16 = MessageDelayReport
+ Report.report17 = MessageDeliveryReport
+ Report.report18 = MessageGraphvizReport
+ Report.report19 = MessageReport
+ Report.report20 = MessageStatsReport
+ Report.report14 = PingAppReporter
+ Report.report11 = TotalContactTimeReport
+
+#Report.report24 = MyReport
+
+## Default settings for some routers settings
+ProphetRouter.secondsInTimeUnit = 30
+SprayAndWaitRouter.nrofCopies = 6
+SprayAndWaitRouter.binaryMode = true
+
+## Optimization settings -- these affect the speed of the simulation
+## see World class for details.
+Optimization.cellSizeMult = 5
+Optimization.randomizeUpdateOrder = true
+
+## GUI settings
+
+# GUI underlay image settings
+#GUI.UnderlayImage.fileName = data/pune_map.png
+GUI.UnderlayImage.fileName = data/srinagar_(2).jpg
+
+# Image offset in pixels (x, y)
+GUI.UnderlayImage.offset = 0,-60
+# Scaling factor for the image
+GUI.UnderlayImage.scale = 1
+# Image rotation (radians)
+GUI.UnderlayImage.rotate = 0
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 100
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$

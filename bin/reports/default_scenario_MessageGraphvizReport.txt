@@ -1,0 +1,4 @@
+/* scenario default_scenario
+0 messages delivered at sim time 0.0 */
+digraph msggraph {
+}

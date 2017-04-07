@@ -1,0 +1,1 @@
+# messages: event-type org-node (loc-x,loc-y) (anchor-x,anchor-y) r=<core> a=<availability> ttl size [node-snd ( loc-x loc-y ) [node-rcv ( loc-x loc-y)]]
